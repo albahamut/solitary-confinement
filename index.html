@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solitary Confinement — Multiplayer Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient"></div>
+  <main class="app-shell">
+    <section class="hero card-panel" id="welcomeScreen">
+      <div class="brand-row">
+        <div class="heartmark">J♥</div>
+        <div>
+          <h1>Solitary Confinement</h1>
+          <p>Prison-themed multiplayer social deduction prototype</p>
+        </div>
+      </div>
+      <div class="join-grid">
+        <label>Player name
+          <input id="playerName" maxlength="24" placeholder="Enter your name" autocomplete="off" />
+        </label>
+        <button id="createBtn" class="primary">Create Room</button>
+        <div class="divider"><span>or</span></div>
+        <label>Room code
+          <input id="roomCodeInput" maxlength="8" placeholder="ABC123" autocomplete="off" />
+        </label>
+        <button id="joinBtn">Join Room</button>
+      </div>
+      <p class="tiny">This is a non-violent prison-themed party-game adaptation. Elimination is represented by a stylized collar animation.</p>
+    </section>
+
+    <section class="game-layout hidden" id="gameScreen">
+      <header class="topbar card-panel">
+        <div>
+          <div class="eyebrow">Room <span id="roomCode">------</span></div>
+          <h2 id="phaseTitle">Lobby</h2>
+        </div>
+        <div class="status-pills">
+          <span id="roundPill" class="pill">Round 0</span>
+          <span id="alivePill" class="pill">0 alive</span>
+          <span id="rolePill" class="pill role-hidden">Role hidden</span>
+        </div>
+      </header>
+
+      <section class="main-grid">
+        <aside class="side card-panel">
+          <h3>Players</h3>
+          <div id="playersList" class="players-list"></div>
+          <div class="host-actions">
+            <button id="startBtn" class="primary hidden">Start Game</button>
+            <button id="nextRoundBtn" class="hidden">Next Round</button>
+            <button id="resetBtn" class="danger hidden">Reset Room</button>
+          </div>
+          <div class="rules-note">
+            <strong>Core loop:</strong> prisoners see others' cards, not their own. Talk publicly in the block or privately in secret. Declare your own card. Wrong declarations are eliminated.
+          </div>
+        </aside>
+
+        <section class="table card-panel">
+          <div class="table-head">
+            <h3>The Cells</h3>
+            <div id="winnerBanner" class="winner hidden"></div>
+          </div>
+          <div id="cardsGrid" class="cards-grid"></div>
+          <div id="declarePanel" class="declare-panel hidden">
+            <span>Lock your declaration:</span>
+            <select id="rankSelect"></select>
+            <select id="suitSelect"></select>
+            <button id="submitBtn" class="primary">Declare</button>
+          </div>
+        </section>
+
+        <section class="chat card-panel">
+          <div class="tabs">
+            <button class="tab active" data-tab="public">Public</button>
+            <button class="tab" data-tab="private">Private</button>
+            <button class="tab" data-tab="system">System</button>
+          </div>
+
+          <div id="publicTab" class="tabpane active">
+            <div id="publicLog" class="log"></div>
+            <form id="publicForm" class="message-form">
+              <input id="publicInput" placeholder="Say something publicly..." autocomplete="off" />
+              <button>Send</button>
+            </form>
+          </div>
+
+          <div id="privateTab" class="tabpane">
+            <div class="private-controls">
+              <select id="privateTarget"></select>
+              <input id="privateInput" placeholder="Secret message..." autocomplete="off" />
+              <button id="privateSendBtn">Whisper</button>
+            </div>
+            <div class="tell-card-box">
+              <span>Tell selected player:</span>
+              <select id="tellRankSelect"></select>
+              <select id="tellSuitSelect"></select>
+              <button id="tellCardBtn">Send Card Claim</button>
+            </div>
+            <div id="privateLog" class="log private-log"></div>
+          </div>
+
+          <div id="systemTab" class="tabpane">
+            <div id="systemLog" class="log"></div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <div id="collarOverlay" class="collar-overlay hidden">
+    <div class="collar-scene">
+      <div class="collar-name" id="collarName">Game Over</div>
+      <div class="collar-ring"></div>
+      <div class="collar-burst">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="collar-text">PRISON COLLAR DETONATED</div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
